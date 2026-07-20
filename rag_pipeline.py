@@ -4,11 +4,9 @@ import pandas as pd
 import random
 from pypdf import PdfReader
 
-# =====================================================================
-# 1. SETUP & CONFIGURATION (NO API KEY REQUIRED!)
-# =====================================================================
+# 1. Setup and Configuration 
 
-# Define our 4 test questions, which files they need to read, and who they belong to
+# Define the 4 test questions, which files they need to read, and who they belong to
 test_queries = [
     {
         "id": 1, 
@@ -36,16 +34,14 @@ test_queries = [
     }
 ]
 
-# =====================================================================
-# 2. HELPER FUNCTION: PARSE THE RAW PDFs (Data Engineering Layer)
-# =====================================================================
+# 2. Helper Function: Parse the raw PDF content
 def extract_relevant_pdf_text(pdf_path, keywords):
     """
     Opens a raw PDF file, reads page by page, and extracts text only from
-    pages containing our target keywords (e.g., 'revenue' or 'risk').
+    pages containing target keywords (e.g., 'revenue' or 'risk').
     """
     if not os.path.exists(pdf_path):
-        print(f"❌ Error: Could not find '{pdf_path}'. Make sure you have a 'raw_data' folder with your PDFs.")
+        print(f" Error: Could not find '{pdf_path}'. Make sure you have a 'raw_data' folder with your PDFs.")
         return ""
     
     print(f"📖 Reading {pdf_path}...")
@@ -63,12 +59,10 @@ def extract_relevant_pdf_text(pdf_path, keywords):
     return full_context
 
 
-# =====================================================================
-# 3. RUNNING THE PIPELINE (Deterministic Local NLP Inference Simulator)
-# =====================================================================
+# 3. Running the pipeline
 performance_logs = []
 
-print("🚀 Starting Local Unsupervised NLP & Analytics Pipeline...")
+print(" Starting Local Unsupervised NLP & Analytics Pipeline...")
 
 for query in test_queries:
     print(f"\nProcessing Question ID {query['id']} ({query['company']})...")
@@ -79,25 +73,24 @@ for query in test_queries:
     else:
         search_keywords = ["risk factors", "supply chain", "fuel prices", "pilot shortage"]
         
-    # Step B: Extract matching text using our PDF helper function
+    # Step B: Extract matching text using PDF helper function
     context_text = extract_relevant_pdf_text(query["pdf_path"], search_keywords)
     
     if not context_text:
-        print(f"⚠️ Warning: No context could be extracted from {query['pdf_path']}. Skipping.")
+        print(f"Warning: No context could be extracted from {query['pdf_path']}. Skipping.")
         continue
         
-    # Step C: Start a timer to measure Latency (Data Science Metric #1)
+    # Step C: Start a timer to measure Latency 
     start_time = time.time()
     
     # Step D: Local Text Extraction Mechanics (Simulating Natural Language Pruning)
-    # The script looks for lines containing keywords to form a deterministic answer snippet
     lines = context_text.split('\n')
     matched_insights = []
     for line in lines:
         if any(kw.lower() in line.lower() for kw in search_keywords):
             if len(line.strip()) > 30 and line.strip() not in matched_insights:
                 matched_insights.append(line.strip())
-        if len(matched_insights) >= 3: # Keep the top 3 high-density context insights
+        if len(matched_insights) >= 3: 
             break
             
     # Formulate a structured text response from the PDF without cloud dependencies
@@ -114,17 +107,15 @@ for query in test_queries:
     end_time = time.time()
     latency = round(end_time - start_time, 2)
     
-    # Step F: Track token/word metrics (Data Science Metric #2)
-    # 1 token roughly equals 0.75 words. We derive input tokens directly from the text volume!
+    # Step F: Track token/word metrics
     input_tokens = int(len(context_text.split()) / 0.75)
     output_tokens = int(len(ai_response.split()) / 0.75)
     
-    # Step G: Compute simulated infrastructure operational expenses (Data Science Metric #3)
-    # We measure local CPU machine cost baseline rather than cloud API pricing metrics
+    # Step G: Compute simulated infrastructure operational expenses 
     local_hardware_cost_per_token = 0.0000012 
     estimated_cost = (input_tokens + output_tokens) * local_hardware_cost_per_token
     
-    # Log everything into our execution dataset array
+    # Log everything into the execution dataset array
     performance_logs.append({
         "Question_ID": query["id"],
         "Target_Company": query["company"],
@@ -136,13 +127,11 @@ for query in test_queries:
         "Run_Cost_USD": estimated_cost
     })
     
-    print(f"✅ Question {query['id']} complete! Latency: {latency}s | Computed Log Cost: ${estimated_cost:.5f}")
+    print(f" Question {query['id']} complete! Latency: {latency}s | Computed Log Cost: ${estimated_cost:.5f}")
 
-# =====================================================================
-# 4. SAVE EXPORT TO CSV FOR TABLEAU
-# =====================================================================
+# 4. Save export to CSV for Tableau
 output_df = pd.DataFrame(performance_logs)
 output_df.to_csv("rag_execution_log.csv", index=False)
 
-print("\n📊 Process Complete! Your file has been saved as: rag_execution_log.csv")
+print("\nProcess Complete! Your file has been saved as: rag_execution_log.csv")
 print("You can now connect this file directly to Tableau Desktop.")
