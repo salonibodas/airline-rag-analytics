@@ -1,6 +1,6 @@
 # SEC Airline RAG Pipeline & Telemetry Analytics
 
-An automated, local data science pipeline that programmatically extracts, prunes, and processes unstructured narrative financial data from massive, 100+ page corporate SEC 10-K filings (FY2024 for United Airlines and Delta Air Lines) to evaluate Natural Language Processing (NLP) inference efficiency.
+A local data science pipeline that programmatically extracts, prunes, and processes unstructured narrative financial data from large, 100+ page SEC 10-K filings (FY2024 for United Airlines and Delta Air Lines) to evaluate Natural Language Processing (NLP) inference efficiency.
 
 ## Tech Stack & Architecture
 - **Language:** Python 3.12 (Pandas, PyPDF)
