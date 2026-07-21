@@ -4,7 +4,7 @@ import pandas as pd
 import random
 from pypdf import PdfReader
 
-# 1. Setup and Configuration 
+# 1. Setup 
 
 # Define the 4 test questions, which files they need to read, and who they belong to
 test_queries = [
@@ -34,7 +34,7 @@ test_queries = [
     }
 ]
 
-# 2. Helper Function: Parse the raw PDF content
+# 2. Parse the raw PDF content
 def extract_relevant_pdf_text(pdf_path, keywords):
     """
     Opens a raw PDF file, reads page by page, and extracts text only from
@@ -44,7 +44,7 @@ def extract_relevant_pdf_text(pdf_path, keywords):
         print(f" Error: Could not find '{pdf_path}'. Make sure you have a 'raw_data' folder with your PDFs.")
         return ""
     
-    print(f"📖 Reading {pdf_path}...")
+    print(f" Reading {pdf_path}...")
     reader = PdfReader(pdf_path)
     extracted_text = []
     
@@ -67,23 +67,23 @@ print(" Starting Local Unsupervised NLP & Analytics Pipeline...")
 for query in test_queries:
     print(f"\nProcessing Question ID {query['id']} ({query['company']})...")
     
-    # Step A: Pick search keywords based on what the question is asking
+    # Step 1: Pick search keywords based on what the question is asking
     if "revenue" in query["q"].lower():
         search_keywords = ["revenue", "operating revenue", "passenger revenues", "operating income"]
     else:
         search_keywords = ["risk factors", "supply chain", "fuel prices", "pilot shortage"]
         
-    # Step B: Extract matching text using PDF helper function
+    # Step 2: Extract matching text using PDF helper function
     context_text = extract_relevant_pdf_text(query["pdf_path"], search_keywords)
     
     if not context_text:
         print(f"Warning: No context could be extracted from {query['pdf_path']}. Skipping.")
         continue
         
-    # Step C: Start a timer to measure Latency 
+    # Step 3: Start a timer to measure Latency 
     start_time = time.time()
     
-    # Step D: Local Text Extraction Mechanics (Simulating Natural Language Pruning)
+    # Step 4: Local Text Extraction Mechanics (Simulating Natural Language Pruning)
     lines = context_text.split('\n')
     matched_insights = []
     for line in lines:
@@ -103,15 +103,15 @@ for query in test_queries:
     compute_delay = len(context_text) / 50000.0 + random.uniform(0.2, 0.5)
     time.sleep(compute_delay)
     
-    # Step E: Stop the timer
+    # Step 5: Stop the timer
     end_time = time.time()
     latency = round(end_time - start_time, 2)
     
-    # Step F: Track token/word metrics
+    # Step 6: Track token/word metrics
     input_tokens = int(len(context_text.split()) / 0.75)
     output_tokens = int(len(ai_response.split()) / 0.75)
     
-    # Step G: Compute simulated infrastructure operational expenses 
+    # Step 7: Compute simulated infrastructure operational expenses 
     local_hardware_cost_per_token = 0.0000012 
     estimated_cost = (input_tokens + output_tokens) * local_hardware_cost_per_token
     
