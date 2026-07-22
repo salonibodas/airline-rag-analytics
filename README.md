@@ -15,6 +15,6 @@ A local data science pipeline that programmatically extracts, prunes, and proces
 ## Execution & Automation Flow
 The `rag_pipeline.py` script executes the following lifecycle dynamically:
 1. Scans target PDF filings inside `raw_data/` page by page.
-2. Applies regex and keyword filters to isolate dense context (e.g., Operating Revenue or Risk Factors) while discarding irrelevant information.
-3. Formulates structured local responses, tracks compute speeds, models operational cost telemetry, and dumps data into `rag_execution_log.csv`.
-4. Dynamically feeds the log into an interactive, side-by-side Tableau executive dashboard workbook (`RAG_Analytics_Dashboard.twbx`).
+2. Uses keyword filters to isolate dense context (Operating Revenue or Risk Factors) and gets rid of irrelevant information.
+3. Formulates structured local responses, tracks compute speeds, models operational cost telemetry, and puts data into `rag_execution_log.csv`.
+4. Feeds the log into a Tableau dashboard workbook (`RAG_Analytics_Dashboard.twbx`).
